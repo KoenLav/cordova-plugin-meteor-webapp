@@ -103,12 +103,14 @@ class AssetBundle {
 
             if (parentAssetBundle == null || parentAssetBundle.cachedAssetForUrlPath(urlPath, entry.hash) == null) {
                 Asset asset = new Asset(entry.filePath, urlPath, entry.fileType, entry.cacheable, entry.hash, entry.sourceMapUrlPath);
+                Log.w(LOG_TAG, "Adding asset " + urlPath + " from filepath " + asset.getFileUri().toString());
                 addAsset(asset);
             }
 
             if (entry.sourceMapFilePath != null && entry.sourceMapUrlPath != null) {
                 if (parentAssetBundle == null || parentAssetBundle.cachedAssetForUrlPath(entry.sourceMapUrlPath, null) == null) {
                     Asset sourceMap = new Asset(entry.sourceMapFilePath, entry.sourceMapUrlPath, "json", true, null, null);
+                    Log.w(LOG_TAG, "Adding asset " + urlPath + " from filepath " + sourceMap.getFileUri().toString());
                     addAsset(sourceMap);
                 }
             }
@@ -162,6 +164,7 @@ class AssetBundle {
     }
 
     public Asset getIndexFile() {
+        Log.w(LOG_TAG, "index.html found in bundle " + version + ":" + directoryUri.toString());
         return indexFile;
     }
 
@@ -248,6 +251,21 @@ class AssetBundle {
                 } catch (IOException e) {
                 }
             }
+        }
+    }
+
+    static void printDirectoryContent(File folder, boolean recursive) {
+        if (folder.isDirectory() && folder.exists()) {
+            Log.w(LOG_TAG, "Directory " + folder.getAbsolutePath() + " content is:");
+            File[] allFiles = folder.listFiles();
+            for (File file : allFiles) {
+                Log.w(LOG_TAG, "\t" + file.getAbsolutePath());
+                if (recursive && file.isDirectory()) {
+                    printDirectoryContent(file, true);
+                }
+            }
+        } else {
+            Log.w(LOG_TAG, "Directory " + folder.getAbsolutePath() + " doesnt exists");
         }
     }
 }

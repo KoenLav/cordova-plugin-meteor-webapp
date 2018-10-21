@@ -124,7 +124,15 @@ final class WebAppConfiguration {
           NSLog("BLACKLIST - removing blacklisted versions");
           userDefaults.removeObject(forKey: "MeteorWebAppBlacklistedVersions")
         } else {
-          userDefaults.set(newValue, forKey: "MeteorWebAppBlacklistedVersions")
+          let retryAttempted = userDefaults.object(forKey: "MeteorWebAppBlacklistedForRetry")
+          if retryAttempted == nil {
+            print("BLACKLIST - blacklisting version \(newValue) for retry");
+            userDefaults.set(newValue, forKey: "MeteorWebAppBlacklistedForRetry")
+          } else {
+            print("BLACKLIST - removing retry list and blacklisting \(newValue) for ever")
+            userDefaults.removeObject(forKey: "MeteorWebAppBlacklistedForRetry")
+            userDefaults.set(newValue, forKey: "MeteorWebAppBlacklistedVersions")
+          }
         }
         userDefaults.synchronize()
       }

@@ -77,13 +77,14 @@ class WebAppConfiguration {
             Log.d("BLACKLIST", "adding faulty version for retry: " + version);
             versionsForRetry.add(version);
             preferences.edit().putStringSet("versionsForRetry", versionsForRetry).commit();
-        } else if () {
+        } else {
             versionsForRetry.remove(version);
-        blacklistedVersions.add(version);
+            blacklistedVersions.add(version);
             Log.d("BLACKLIST", "blacklisting version: " + version);
-            preferences.edit().putStringSet("versionsForRetry", versionsForRetry).commit();
+        }
+        
+        preferences.edit().putStringSet("versionsForRetry", versionsForRetry).commit();
         preferences.edit().putStringSet("blacklistedVersions", blacklistedVersions).commit();
-    }
     }
 
     public void reset() {
