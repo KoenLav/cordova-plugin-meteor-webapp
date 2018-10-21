@@ -203,6 +203,7 @@ open class WebAppLocalServer: METPlugin, AssetBundleManagerDelegate {
   func startStartupTimer() {
     // Don't start the startup timer if the app started up in the background
     if UIApplication.shared.applicationState == UIApplicationState.active {
+      NSLog("App startup timer started")
       startupTimer?.start(withTimeInterval: startupTimeoutInterval)
     }
   }
@@ -221,6 +222,7 @@ open class WebAppLocalServer: METPlugin, AssetBundleManagerDelegate {
   // MARK: - Public plugin commands
 
   open func startupDidComplete(_ command: CDVInvokedUrlCommand) {
+    NSLog("App startup confirmed")
     startupTimer?.stop()
 
     // If startup completed successfully, we consider a version good
@@ -324,6 +326,8 @@ open class WebAppLocalServer: METPlugin, AssetBundleManagerDelegate {
     // Only reload if we have a pending asset bundle to reload
     if pendingAssetBundle != nil {
       forceReload()
+    } else {
+      NSLog("There is no last good version we can revert to")
     }
   }
 

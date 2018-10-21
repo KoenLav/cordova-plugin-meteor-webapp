@@ -133,7 +133,7 @@ class AssetBundle {
     public Asset assetForUrlPath(String urlPath) {
         Asset asset = ownAssetsByURLPath.get(urlPath);
         if (asset == null && parentAssetBundle != null) {
-            Log.w(LOG_TAG, "Asset " + urlPath + " not found in bundle " + version + ":" + directoryUri.toString() + ", going to parent bundle");
+            Log.d(LOG_TAG, "Asset " + urlPath + " not found in bundle " + version + ":" + directoryUri.toString() + ", serving from parent bundle");
             asset = parentAssetBundle.assetForUrlPath(urlPath);
         } else if (asset == null) {
             Log.w(LOG_TAG, "Asset " + urlPath + " not found in bundle " + version + ":" + directoryUri.toString() + ", no parent bundle");

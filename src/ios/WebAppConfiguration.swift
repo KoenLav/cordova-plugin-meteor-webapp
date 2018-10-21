@@ -113,16 +113,15 @@ final class WebAppConfiguration {
   /// Blacklisted asset bundle versions
   var blacklistedVersions: [String] {
     get {
-      let blvs = userDefaults.array(forKey: "MeteorWebAppBlacklistedVersions") as? [String] ?? []
-      print("BLACKLIST - getBlacklistedVersions: \(blvs)");
-      return blvs
+      let versions = userDefaults.array(forKey: "MeteorWebAppBlacklistedVersions") as? [String] ?? []
+      NSLog("BLACKLIST - blacklistedVersions: \(versions)")
+      return versions
     }
 
     set {
       if newValue != blacklistedVersions {
         if newValue.isEmpty {
-          print("BLACKLIST - removing blacklisted versions");
-          userDefaults.removeObject(forKey: "MeteorWebAppBlacklistedForRetry")
+          NSLog("BLACKLIST - removing blacklisted versions");
           userDefaults.removeObject(forKey: "MeteorWebAppBlacklistedVersions")
         } else {
           let retryAttempted = userDefaults.object(forKey: "MeteorWebAppBlacklistedForRetry")
@@ -140,10 +139,44 @@ final class WebAppConfiguration {
     }
   }
 
+  var versionsToRetry: [String] {
+    get {
+      let versions = userDefaults.array(forKey: "MeteorWebAppVersionsToRetry") as? [String] ?? []
+      NSLog("BLACKLIST - versionsToRetry: \(versions)")
+      return versions
+    }
+    set {
+      if newValue != versionsToRetry {
+        if newValue.isEmpty {
+          NSLog("BLACKLIST - removing versions to retry")
+          userDefaults.removeObject(forKey: "MeteorWebAppVersionsToRetry")
+        } else {
+          userDefaults.set(newValue, forKey: "MeteorWebAppVersionsToRetry")
+        }
+        userDefaults.synchronize()
+      }
+    }
+  }
+    
   func addBlacklistedVersion(_ version: String) {
     var blacklistedVersions = self.blacklistedVersions
-    blacklistedVersions.append(version)
-    self.blacklistedVersions = blacklistedVersions
+    var versionsToRetry = self.versionsToRetry
+    
+    if (!versionsToRetry.contains(version) && !blacklistedVersions.contains(version)) {
+      NSLog("BLACKLIST - adding faulty version to retry: \(version)")
+      versionsToRetry.append(version)
+      self.versionsToRetry = versionsToRetry
+    } else {
+      if let i = versionsToRetry.index(of: version) {
+        versionsToRetry.remove(at: i)
+        self.versionsToRetry = versionsToRetry
+      }
+      if (!blacklistedVersions.contains(version)) {
+        blacklistedVersions.append(version)
+        NSLog("BLACKLIST - blacklisting version: \(version)")
+        self.blacklistedVersions = blacklistedVersions
+      }
+    }
   }
 
   func reset() {
@@ -152,5 +185,6 @@ final class WebAppConfiguration {
     lastDownloadedVersion = nil
     lastKnownGoodVersion = nil
     blacklistedVersions = []
+    versionsToRetry = []
   }
 }
