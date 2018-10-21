@@ -132,7 +132,6 @@ public class WebAppLocalServer extends CordovaPlugin implements AssetBundleManag
 
         // Downloaded versions are stored in /data/data/<app>/files/meteor
         File versionsDirectory = new File(cordova.getActivity().getFilesDir(), "meteor");
-        printDirectoryContent(versionsDirectory, true);
 
         // If the last seen initial version is different from the currently bundled
         // version, we delete the versions directory and unset lastDownloadedVersion
@@ -547,21 +546,6 @@ public class WebAppLocalServer extends CordovaPlugin implements AssetBundleManag
             printFileContent(file);
         }catch(Exception e) {
             Log.e(LOG_TAG, "Error while printing file content", e);
-        }
-    }
-
-    void printDirectoryContent(File folder, boolean recursive) {
-        if (folder.isDirectory() && folder.exists()) {
-            Log.w(LOG_TAG, "Directory " + folder.getAbsolutePath() + " content is:");
-            File[] allFiles = folder.listFiles();
-            for (File file : allFiles) {
-                Log.w(LOG_TAG, "\t" + file.getAbsolutePath());
-                if (recursive && file.isDirectory()) {
-                    printDirectoryContent(file, true);
-                }
-            }
-        } else {
-            Log.w(LOG_TAG, "Directory " + folder.getAbsolutePath() + " doesnt exists");
         }
     }
 

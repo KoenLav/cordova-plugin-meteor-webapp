@@ -253,19 +253,4 @@ class AssetBundle {
             }
         }
     }
-
-    static void printDirectoryContent(File folder, boolean recursive) {
-        if (folder.isDirectory() && folder.exists()) {
-            Log.w(LOG_TAG, "Directory " + folder.getAbsolutePath() + " content is:");
-            File[] allFiles = folder.listFiles();
-            for (File file : allFiles) {
-                Log.w(LOG_TAG, "\t" + file.getAbsolutePath());
-                if (recursive && file.isDirectory()) {
-                    printDirectoryContent(file, true);
-                }
-            }
-        } else {
-            Log.w(LOG_TAG, "Directory " + folder.getAbsolutePath() + " doesnt exists");
-        }
-    }
 }
