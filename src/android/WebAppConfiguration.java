@@ -76,7 +76,6 @@ class WebAppConfiguration {
         if (!versionsForRetry.contains(version) && !blacklistedVersions.contains(version)) {
             Log.d("BLACKLIST", "adding faulty version for retry: " + version);
             versionsForRetry.add(version);
-            preferences.edit().putStringSet("versionsForRetry", versionsForRetry).commit();
         } else {
             versionsForRetry.remove(version);
             blacklistedVersions.add(version);
