@@ -429,9 +429,6 @@ public class WebAppLocalServer extends CordovaPlugin implements AssetBundleManag
 
                 AssetBundle.Asset asset = currentAssetBundle.assetForUrlPath(uri.getPath());
                 if (asset != null) {
-                    if (asset.getFileUri().toString().endsWith("index.html")) {
-                        printFileContent(asset.getFileUri());
-                    }
                     return asset.getFileUri();
                 } else {
                     return null;
@@ -492,7 +489,6 @@ public class WebAppLocalServer extends CordovaPlugin implements AssetBundleManag
                 AssetBundle.Asset asset = currentAssetBundle.getIndexFile();
                 if (asset != null) {
                     Log.w(LOG_TAG, "Serving index.html for uri " + uri.toString());
-                    printFileContent(asset.getFileUri());
                     return asset.getFileUri();
                 } else {
                     return null;
@@ -538,31 +534,6 @@ public class WebAppLocalServer extends CordovaPlugin implements AssetBundleManag
 
     void setTestingDelegate(TestingDelegate testingDelegate) {
         this.testingDelegate = testingDelegate;
-    }
-
-    void printFileContent(Uri uri) {
-        File file = new File(URI.create(uri.toString()));
-        try {
-            printFileContent(file);
-        }catch(Exception e) {
-            Log.e(LOG_TAG, "Error while printing file content", e);
-        }
-    }
-
-    public static void printStreamContent(InputStream is) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        String line = null;
-        while ((line = reader.readLine()) != null) {
-            Log.w(LOG_TAG, line);
-        }
-        reader.close();
-    }
-
-    public static void printFileContent (File fl) throws Exception {
-        FileInputStream fin = new FileInputStream(fl);
-        printStreamContent(fin);
-        //Make sure you close all streams.
-        fin.close();
     }
 
     //endregion
