@@ -194,17 +194,6 @@ public class WebAppLocalServer extends CordovaPlugin implements AssetBundleManag
         }
     }
 
-    private void switchPendingVersion(CallbackContext callbackContext) {
-        // If there is a pending asset bundle, we make it the current
-        if (pendingAssetBundle != null) {
-            Log.w(LOG_TAG, "Switching pending version " + pendingAssetBundle.getVersion() + " as current version.");
-            currentAssetBundle = pendingAssetBundle;
-            pendingAssetBundle = null;
-        }
-
-        callbackContext.success();
-    }
-
     private void startStartupTimer() {
         removeStartupTimer();
 
